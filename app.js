@@ -4,12 +4,20 @@ var app = express();
 const PORT = 80;
 
 // static
+app.use('*style.css', function(req, res, next) {
+	req.url += '.gz';
+	res.set('Content-Encoding', 'gzip');
+	res.set('Content-Type', 'text/css');
+	next();
+});
 app.use('/assets', express.static('assets'));
 app.use('/views', express.static('views'));
 
 // GET requests
 app.get('/', function(req, res) {
-	res.sendFile(__dirname + '/index.html');
+	res.set('Content-Encoding', 'gzip');
+	res.set('Content-Type', 'text/html');
+	res.sendFile(__dirname + '/index.html.gz');
 });
 app.get('/project-2048.html', function(req, res) {
 	res.sendFile(__dirname + '/project-2048.html');
